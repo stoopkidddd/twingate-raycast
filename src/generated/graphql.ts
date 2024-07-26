@@ -1642,6 +1642,32 @@ export enum UserType {
   Synced = "SYNCED",
 }
 
+export type GroupsQueryVariables = Exact<{
+  filter?: InputMaybe<GroupFilterInput>;
+}>;
+
+export type GroupsQuery = {
+  __typename?: "QueriesRoot";
+  groups: {
+    __typename?: "GroupConnection";
+    totalCount: number;
+    edges: Array<{
+      __typename?: "GroupEdge";
+      node: {
+        __typename?: "Group";
+        id: string;
+        createdAt: any;
+        updatedAt: any;
+        name: string;
+        type: GroupType;
+        users: { __typename?: "UserConnection"; totalCount: number };
+        resources: { __typename?: "ResourceConnection"; totalCount: number };
+        securityPolicy: { __typename?: "SecurityPolicy"; id: string; name: string };
+      };
+    }>;
+  };
+};
+
 export type RemoteNetworksQueryVariables = Exact<{
   filter?: InputMaybe<RemoteNetworkFilterInput>;
 }>;
@@ -1718,6 +1744,32 @@ export type ResourcesQuery = {
   };
 };
 
+export const GroupsDocument = gql`
+  query groups($filter: GroupFilterInput) {
+    groups(filter: $filter) {
+      totalCount
+      edges {
+        node {
+          id
+          createdAt
+          updatedAt
+          name
+          type
+          users {
+            totalCount
+          }
+          resources {
+            totalCount
+          }
+          securityPolicy {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
 export const RemoteNetworksDocument = gql`
   query remoteNetworks($filter: RemoteNetworkFilterInput) {
     remoteNetworks(filter: $filter) {
@@ -1804,6 +1856,15 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    groups(variables?: GroupsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GroupsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GroupsQuery>(GroupsDocument, variables, { ...requestHeaders, ...wrappedRequestHeaders }),
+        "groups",
+        "query",
+        variables,
+      );
+    },
     remoteNetworks(
       variables?: RemoteNetworksQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,

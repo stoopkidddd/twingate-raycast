@@ -1,0 +1,24 @@
+query groups($filter: GroupFilterInput) {
+  groups(filter: $filter) {
+    totalCount
+    edges {
+      node {
+        id
+        createdAt
+        updatedAt
+        name
+        type
+        users {
+          totalCount
+        }
+        resources {
+          totalCount
+        }
+        securityPolicy {
+          id
+          name
+        }
+      }
+    }
+  }
+}

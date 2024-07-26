@@ -21,6 +21,12 @@
       "title": "Resources",
       "description": "List Resources in your tenant",
       "mode": "view"
+    },
+    {
+      "name": "groups",
+      "title": "Groups",
+      "description": "List Groups in your tenant",
+      "mode": "view"
     }
   ],
   "preferences": [
