@@ -11,12 +11,6 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "index",
-      "title": "Show Typeahead Results",
-      "description": "Template for showing typeahead search with network results.",
-      "mode": "view"
-    },
-    {
       "name": "remote-networks",
       "title": "Remote Networks",
       "description": "List Remote Networks in your tenant",
