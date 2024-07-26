@@ -1,7 +1,8 @@
-import { ActionPanel, Action, List } from "@raycast/api";
-import { useFetch, Response } from "@raycast/utils";
-import { useState } from "react";
 import { URLSearchParams } from "node:url";
+
+import { ActionPanel, Action, List } from "@raycast/api";
+import { useFetch } from "@raycast/utils";
+import { useState } from "react";
 
 export default function Command() {
   const [searchText, setSearchText] = useState("");
@@ -11,7 +12,7 @@ export default function Command() {
       new URLSearchParams({ q: searchText.length === 0 ? "@raycast/api" : searchText }),
     {
       parseResponse: parseFetchResponse,
-    }
+    },
   );
 
   return (
@@ -22,9 +23,7 @@ export default function Command() {
       throttle
     >
       <List.Section title="Results" subtitle={data?.length + ""}>
-        {data?.map((searchResult) => (
-          <SearchListItem key={searchResult.name} searchResult={searchResult} />
-        ))}
+        {data?.map((searchResult) => <SearchListItem key={searchResult.name} searchResult={searchResult} />)}
       </List.Section>
     </List>
   );

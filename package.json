@@ -3,7 +3,7 @@
   "name": "twingate",
   "title": "Twingate",
   "description": "Access Twingate Admin functionality",
-  "icon": "command-icon.png",
+  "icon": "twingate-icon.png",
   "author": "stoopkidddd",
   "categories": [
     "Developer Tools"
@@ -15,23 +15,51 @@
       "title": "Show Typeahead Results",
       "description": "Template for showing typeahead search with network results.",
       "mode": "view"
+    },
+    {
+      "name": "remote-networks",
+      "title": "Remote Networks",
+      "description": "List Remote Networks in your tenant",
+      "mode": "view"
+    },
+    {
+      "name": "resources",
+      "title": "Resources",
+      "description": "List Resources in your tenant",
+      "mode": "view"
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.69.0",
-    "@raycast/utils": "^1.4.8"
+    "@raycast/api": "^1.76.1",
+    "@raycast/utils": "^1.16.0",
+    "date-fns": "^3.6.0",
+    "graphql-request": "^6.1.0",
+    "lodash": "^4.17.21",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "@raycast/eslint-config": "^1.0.6",
-    "@types/node": "20.8.10",
-    "@types/react": "18.2.27",
-    "eslint": "^8.51.0",
-    "prettier": "^3.0.3",
-    "typescript": "^5.2.2"
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.7",
+    "@graphql-codegen/typescript-graphql-request": "^6.2.0",
+    "@graphql-codegen/typescript-operations": "^4.2.1",
+    "@parcel/watcher": "^2.4.1",
+    "@raycast/eslint-config": "^1.0.8",
+    "@types/lodash": "^4.17.5",
+    "@types/node": "^20.14.5",
+    "@types/react": "^18.3.3",
+    "concurrently": "^8.2.2",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "graphql": "^16.8.2",
+    "prettier": "^3.3.2",
+    "react": "^18.3.1",
+    "typescript": "^5.4.5"
   },
   "scripts": {
     "build": "ray build -e dist",
-    "dev": "ray develop",
+    "generate": "graphql-codegen --config codegen.ts",
+    "dev": "concurrently \"ray develop\" \"npm run generate -- --watch\"",
     "fix-lint": "ray lint --fix",
     "lint": "ray lint",
     "publish": "npx @raycast/api@latest publish"

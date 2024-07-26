@@ -1,0 +1,33 @@
+query remoteNetworks($filter: RemoteNetworkFilterInput) {
+  remoteNetworks(filter: $filter) {
+    totalCount
+    edges {
+      node {
+        id
+        createdAt
+        updatedAt
+        name
+        location
+        isActive
+
+        resources {
+          totalCount
+        }
+
+        connectors {
+          totalCount
+          edges {
+            node {
+              id
+              name
+              lastHeartbeatAt
+              state
+              publicIP
+              privateIPs
+            }
+          }
+        }
+      }
+    }
+  }
+}
