@@ -1683,6 +1683,41 @@ export type RemoteNetworksQuery = {
   };
 };
 
+export type ResourcesQueryVariables = Exact<{
+  filter?: InputMaybe<ResourceFilterInput>;
+}>;
+
+export type ResourcesQuery = {
+  __typename?: "QueriesRoot";
+  resources: {
+    __typename?: "ResourceConnection";
+    totalCount: number;
+    edges: Array<{
+      __typename?: "ResourceEdge";
+      node: {
+        __typename?: "Resource";
+        id: string;
+        createdAt: any;
+        updatedAt: any;
+        name: string;
+        alias?: string | null;
+        usageBasedAutolockDurationDays?: number | null;
+        isBrowserShortcutEnabled: boolean;
+        address: { __typename?: "ResourceAddress"; type: AddressType; value: string };
+        remoteNetwork: { __typename?: "RemoteNetwork"; id: string; name: string; location: RemoteNetworkLocation };
+        securityPolicy?: { __typename?: "SecurityPolicy"; id: string; name: string } | null;
+        access: {
+          __typename?: "AccessConnection";
+          edges: Array<{
+            __typename?: "AccessEdge";
+            node: { __typename: "Group"; id: string } | { __typename: "ServiceAccount"; id: string };
+          }>;
+        };
+      };
+    }>;
+  };
+};
+
 export const RemoteNetworksDocument = gql`
   query remoteNetworks($filter: RemoteNetworkFilterInput) {
     remoteNetworks(filter: $filter) {
@@ -1716,6 +1751,47 @@ export const RemoteNetworksDocument = gql`
     }
   }
 `;
+export const ResourcesDocument = gql`
+  query resources($filter: ResourceFilterInput) {
+    resources(filter: $filter) {
+      totalCount
+      edges {
+        node {
+          id
+          createdAt
+          updatedAt
+          name
+          address {
+            type
+            value
+          }
+          alias
+          remoteNetwork {
+            id
+            name
+            location
+          }
+          securityPolicy {
+            id
+            name
+          }
+          usageBasedAutolockDurationDays
+          isBrowserShortcutEnabled
+          access {
+            edges {
+              node {
+                ... on Node {
+                  __typename
+                  id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 
 export type SdkFunctionWrapper = <T>(
   action: (requestHeaders?: Record<string, string>) => Promise<T>,
@@ -1739,6 +1815,18 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         "remoteNetworks",
+        "query",
+        variables,
+      );
+    },
+    resources(
+      variables?: ResourcesQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<ResourcesQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<ResourcesQuery>(ResourcesDocument, variables, { ...requestHeaders, ...wrappedRequestHeaders }),
+        "resources",
         "query",
         variables,
       );

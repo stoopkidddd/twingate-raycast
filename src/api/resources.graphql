@@ -1,0 +1,39 @@
+query resources($filter: ResourceFilterInput) {
+  resources(filter: $filter) {
+    totalCount
+    edges {
+      node {
+        id
+        createdAt
+        updatedAt
+        name
+        address {
+          type
+          value
+        }
+        alias
+        remoteNetwork {
+          id
+          name
+          location
+        }
+        securityPolicy {
+          id
+          name
+        }
+        usageBasedAutolockDurationDays
+        isBrowserShortcutEnabled
+        access {
+          edges {
+            node {
+              ... on Node {
+                __typename
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

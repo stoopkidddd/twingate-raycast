@@ -1,5 +1,5 @@
 import { Action, ActionPanel, List, Image, getPreferenceValues } from "@raycast/api";
-import { format } from "date-fns";
+import { formatRelative } from "date-fns";
 import { useState } from "react";
 
 import { ConnectorState, RemoteNetworkLocation, RemoteNetworksQuery } from "./generated/graphql";
@@ -22,7 +22,11 @@ const connectorStateMap: Record<ConnectorState, string> = {
 
 type RemoteNetwork = RemoteNetworksQuery["remoteNetworks"]["edges"][number]["node"];
 
-function RemoteNetworkListItem({ remoteNetwork }: { remoteNetwork: RemoteNetwork }) {
+interface RemoteNetworkListItemProps {
+  remoteNetwork: RemoteNetwork;
+}
+
+function RemoteNetworkListItem({ remoteNetwork }: RemoteNetworkListItemProps) {
   const preferences = getPreferenceValues<Preferences>();
 
   return (
@@ -33,8 +37,15 @@ function RemoteNetworkListItem({ remoteNetwork }: { remoteNetwork: RemoteNetwork
         <List.Item.Detail
           metadata={
             <List.Item.Detail.Metadata>
-              <List.Item.Detail.Metadata.Label title="Created At" text={format(remoteNetwork.createdAt, "Pp")} />
-              <List.Item.Detail.Metadata.Label title="Last Updated At" text={format(remoteNetwork.updatedAt, "Pp")} />
+              <List.Item.Detail.Metadata.Label
+                title="Created At"
+                text={formatRelative(remoteNetwork.createdAt, new Date())}
+              />
+              <List.Item.Detail.Metadata.Label
+                title="Last Updated At"
+                text={formatRelative(remoteNetwork.updatedAt, new Date())}
+              />
+              <List.Item.Detail.Metadata.Separator />
               <List.Item.Detail.Metadata.Label title="Resources" text={remoteNetwork.resources.totalCount.toString()} />
               <List.Item.Detail.Metadata.Separator />
               <List.Item.Detail.Metadata.Label
