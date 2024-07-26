@@ -29,6 +29,25 @@
       "mode": "view"
     }
   ],
+  "preferences": [
+    {
+      "name": "tenantSlug",
+      "type": "textfield",
+      "required": true,
+      "title": "Tenant Slug",
+      "description": "The name of your tenant that you enter as a URL",
+      "placeholder": "acme"
+    },
+    {
+      "name": "apiKey",
+      "type": "password",
+      "required": true,
+      "title": "API Key",
+      "description": "Generate an API key from the admin console. Read-only is recommended.",
+      "link": "https://www.twingate.com/docs/getting-started-with-the-api#generating-an-api-key",
+      "placeholder": "Enter your API key here"
+    }
+  ],
   "dependencies": {
     "@raycast/api": "^1.76.1",
     "@raycast/utils": "^1.16.0",

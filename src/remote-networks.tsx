@@ -1,4 +1,4 @@
-import { Action, ActionPanel, List, Image } from "@raycast/api";
+import { Action, ActionPanel, List, Image, getPreferenceValues } from "@raycast/api";
 import { format } from "date-fns";
 import { useState } from "react";
 
@@ -23,6 +23,8 @@ const connectorStateMap: Record<ConnectorState, string> = {
 type RemoteNetwork = RemoteNetworksQuery["remoteNetworks"]["edges"][number]["node"];
 
 function RemoteNetworkListItem({ remoteNetwork }: { remoteNetwork: RemoteNetwork }) {
+  const preferences = getPreferenceValues<Preferences>();
+
   return (
     <List.Item
       title={remoteNetwork.name}
@@ -59,7 +61,7 @@ function RemoteNetworkListItem({ remoteNetwork }: { remoteNetwork: RemoteNetwork
           <ActionPanel.Section>
             <Action.OpenInBrowser
               title="Open in Browser"
-              url={`https://stoopkidhome.twingate.com/networks/${remoteNetwork.id}`}
+              url={`https://${preferences.tenantSlug}.twingate.com/networks/${remoteNetwork.id}`}
             />
           </ActionPanel.Section>
         </ActionPanel>
