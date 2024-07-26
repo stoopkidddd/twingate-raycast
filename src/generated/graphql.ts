@@ -1744,6 +1744,46 @@ export type ResourcesQuery = {
   };
 };
 
+export type ServiceAccountsQueryVariables = Exact<{
+  filter?: InputMaybe<ServiceAccountFilterInput>;
+}>;
+
+export type ServiceAccountsQuery = {
+  __typename?: "QueriesRoot";
+  serviceAccounts: {
+    __typename?: "ServiceAccountConnection";
+    totalCount: number;
+    edges: Array<{
+      __typename?: "ServiceAccountEdge";
+      node: {
+        __typename?: "ServiceAccount";
+        id: string;
+        createdAt: any;
+        updatedAt: any;
+        name: string;
+        resources: { __typename?: "ResourceConnection"; totalCount: number };
+        keys: {
+          __typename?: "ServiceAccountKeyConnection";
+          totalCount: number;
+          edges: Array<{
+            __typename?: "ServiceAccountKeyEdge";
+            node: {
+              __typename?: "ServiceAccountKey";
+              id: string;
+              name: string;
+              status: ServiceAccountKeyStatus;
+              createdAt: any;
+              expiresAt?: any | null;
+              revokedAt?: any | null;
+              updatedAt: any;
+            };
+          }>;
+        };
+      };
+    }>;
+  };
+};
+
 export const GroupsDocument = gql`
   query groups($filter: GroupFilterInput) {
     groups(filter: $filter) {
@@ -1844,6 +1884,38 @@ export const ResourcesDocument = gql`
     }
   }
 `;
+export const ServiceAccountsDocument = gql`
+  query serviceAccounts($filter: ServiceAccountFilterInput) {
+    serviceAccounts(filter: $filter) {
+      totalCount
+      edges {
+        node {
+          id
+          createdAt
+          updatedAt
+          name
+          resources {
+            totalCount
+          }
+          keys {
+            totalCount
+            edges {
+              node {
+                id
+                name
+                status
+                createdAt
+                expiresAt
+                revokedAt
+                updatedAt
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 
 export type SdkFunctionWrapper = <T>(
   action: (requestHeaders?: Record<string, string>) => Promise<T>,
@@ -1888,6 +1960,21 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         (wrappedRequestHeaders) =>
           client.request<ResourcesQuery>(ResourcesDocument, variables, { ...requestHeaders, ...wrappedRequestHeaders }),
         "resources",
+        "query",
+        variables,
+      );
+    },
+    serviceAccounts(
+      variables?: ServiceAccountsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<ServiceAccountsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<ServiceAccountsQuery>(ServiceAccountsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "serviceAccounts",
         "query",
         variables,
       );
