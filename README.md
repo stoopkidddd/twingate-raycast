@@ -14,7 +14,9 @@ Currently supports the following commands, and only supports "read" functionalit
 
 ## Local Development
 
-To run locally, simply `npm install` and then `npm run dev`.
+To run locally, first you must add a `.env` file with a `TWINGATE_TOKEN` set to a valid API key with minimum read-only permissions. This allows you to generate GraphQL from the Public API.
+
+After that, simply `npm install` and then `npm run dev`.
 
 If you want to generate graphql separately, run `npm run generate`
 
