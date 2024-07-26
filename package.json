@@ -39,6 +39,12 @@
       "title": "Connectors",
       "description": "List Connectors in your tenant",
       "mode": "view"
+    },
+    {
+      "name": "access-requests",
+      "title": "Access Requests",
+      "description": "List Access Requests in your tenant",
+      "mode": "view"
     }
   ],
   "preferences": [

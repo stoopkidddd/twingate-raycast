@@ -1,0 +1,22 @@
+query accessRequests($filter: AccessRequestFilterInput) {
+  accessRequests(filter: $filter) {
+    totalCount
+    edges {
+      node {
+        id
+        reason
+        requestedAt
+        user {
+          id
+          email
+          firstName
+          lastName
+        }
+        resource {
+          id
+          name
+        }
+      }
+    }
+  }
+}

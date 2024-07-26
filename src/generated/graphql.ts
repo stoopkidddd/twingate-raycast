@@ -1642,6 +1642,29 @@ export enum UserType {
   Synced = "SYNCED",
 }
 
+export type AccessRequestsQueryVariables = Exact<{
+  filter?: InputMaybe<AccessRequestFilterInput>;
+}>;
+
+export type AccessRequestsQuery = {
+  __typename?: "QueriesRoot";
+  accessRequests: {
+    __typename?: "AccessRequestConnection";
+    totalCount: number;
+    edges: Array<{
+      __typename?: "AccessRequestEdge";
+      node: {
+        __typename?: "AccessRequest";
+        id: string;
+        reason?: string | null;
+        requestedAt: any;
+        user: { __typename?: "User"; id: string; email?: string | null; firstName: string; lastName: string };
+        resource: { __typename?: "Resource"; id: string; name: string };
+      };
+    }>;
+  };
+};
+
 export type ConnectorsQueryVariables = Exact<{
   filter?: InputMaybe<ConnectorFilterInput>;
 }>;
@@ -1813,6 +1836,30 @@ export type ServiceAccountsQuery = {
   };
 };
 
+export const AccessRequestsDocument = gql`
+  query accessRequests($filter: AccessRequestFilterInput) {
+    accessRequests(filter: $filter) {
+      totalCount
+      edges {
+        node {
+          id
+          reason
+          requestedAt
+          user {
+            id
+            email
+            firstName
+            lastName
+          }
+          resource {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
 export const ConnectorsDocument = gql`
   query connectors($filter: ConnectorFilterInput) {
     connectors(filter: $filter) {
@@ -1982,6 +2029,21 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    accessRequests(
+      variables?: AccessRequestsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<AccessRequestsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<AccessRequestsQuery>(AccessRequestsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "accessRequests",
+        "query",
+        variables,
+      );
+    },
     connectors(
       variables?: ConnectorsQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
