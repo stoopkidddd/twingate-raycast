@@ -1,8 +1,8 @@
-import { Action, ActionPanel, getPreferenceValues, List } from "@raycast/api";
+import { Action, ActionPanel, getPreferenceValues, List, Color } from "@raycast/api";
 import { formatRelative } from "date-fns";
 import { useState } from "react";
 
-import { ConnectorsQuery } from "./generated/graphql";
+import { ConnectorsQuery, ConnectorState } from "./generated/graphql";
 import { useConnectors } from "./hooks/useConnectors";
 import { connectorStateMap } from "./utils/textMaps";
 
@@ -31,7 +31,13 @@ function ConnectorListItem({ connector }: ConnectorListItemProps) {
                 text={formatRelative(connector.updatedAt, new Date())}
               />
               <List.Item.Detail.Metadata.Separator />
-              <List.Item.Detail.Metadata.Label title="Status" text={connectorStateMap[connector.state]} />
+              <List.Item.Detail.Metadata.Label
+                title="Status"
+                text={{
+                  value: connectorStateMap[connector.state],
+                  color: connector.state === ConnectorState.Alive ? Color.Green : Color.Red,
+                }}
+              />
               {connector.lastHeartbeatAt && (
                 <List.Item.Detail.Metadata.Label
                   title="Last Heartbeat At"

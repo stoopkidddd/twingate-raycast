@@ -1,4 +1,4 @@
-import { Action, ActionPanel, List, Image, getPreferenceValues } from "@raycast/api";
+import { Action, ActionPanel, List, Image, getPreferenceValues, Color } from "@raycast/api";
 import { formatRelative } from "date-fns";
 import { useState } from "react";
 
@@ -50,7 +50,10 @@ function RemoteNetworkListItem({ remoteNetwork }: RemoteNetworkListItemProps) {
                 <List.Item.Detail.Metadata.Label
                   key={connector.node.id}
                   title={connector.node.name}
-                  text={connectorStateMap[connector.node.state]}
+                  text={{
+                    value: connectorStateMap[connector.node.state],
+                    color: connector.node.state === ConnectorState.Alive ? Color.Green : Color.Red,
+                  }}
                   icon={{
                     source: connector.node.state === ConnectorState.Alive ? "connected.png" : "disconnected.png",
                     mask: Image.Mask.Circle,

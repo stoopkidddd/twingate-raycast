@@ -1,4 +1,4 @@
-import { Action, ActionPanel, getPreferenceValues, List } from "@raycast/api";
+import { Action, ActionPanel, getPreferenceValues, List, Color } from "@raycast/api";
 import { formatRelative } from "date-fns";
 import { Fragment, useState } from "react";
 
@@ -48,7 +48,13 @@ function ServiceAccountListItem({ serviceAccount }: ServiceAccountListItemProps)
               <List.Item.Detail.Metadata.Separator />
               {serviceAccount.keys.edges.map((key) => (
                 <Fragment key={key.node.id}>
-                  <List.Item.Detail.Metadata.Label title={key.node.name} text={keyStatusMap[key.node.status]} />
+                  <List.Item.Detail.Metadata.Label
+                    title={key.node.name}
+                    text={{
+                      value: keyStatusMap[key.node.status],
+                      color: key.node.status === ServiceAccountKeyStatus.Active ? Color.Green : Color.Red,
+                    }}
+                  />
                   {key.node.updatedAt && (
                     <List.Item.Detail.Metadata.Label
                       title="Updated At"
@@ -101,7 +107,7 @@ export default function Command() {
       isLoading={isLoading}
       onSearchTextChange={setSearchTerm}
       searchText={searchTerm}
-      searchBarPlaceholder="Search service accounts.."
+      searchBarPlaceholder="Search service accounts..."
       throttle
       isShowingDetail={true}
     >
