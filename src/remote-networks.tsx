@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { ConnectorState, RemoteNetworkLocation, RemoteNetworksQuery } from "./generated/graphql";
 import { useRemoteNetworks } from "./hooks/useRemoteNetworks";
+import { connectorStateMap } from "./utils/textMaps";
 
 const iconMap: Record<RemoteNetworkLocation, string> = {
   [RemoteNetworkLocation.Aws]: "aws-2.png",
@@ -11,13 +12,6 @@ const iconMap: Record<RemoteNetworkLocation, string> = {
   [RemoteNetworkLocation.GoogleCloud]: "google-cloud.png",
   [RemoteNetworkLocation.OnPremise]: "on-prem.png",
   [RemoteNetworkLocation.Other]: "on-prem.png",
-};
-
-const connectorStateMap: Record<ConnectorState, string> = {
-  [ConnectorState.Alive]: "Connected",
-  [ConnectorState.DeadNoRelays]: "No Relays",
-  [ConnectorState.DeadNoHeartbeat]: "No Heartbeat",
-  [ConnectorState.DeadHeartbeatTooOld]: "Heartbeat Too Old",
 };
 
 type RemoteNetwork = RemoteNetworksQuery["remoteNetworks"]["edges"][number]["node"];

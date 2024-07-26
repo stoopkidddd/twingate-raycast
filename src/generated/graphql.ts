@@ -1642,6 +1642,35 @@ export enum UserType {
   Synced = "SYNCED",
 }
 
+export type ConnectorsQueryVariables = Exact<{
+  filter?: InputMaybe<ConnectorFilterInput>;
+}>;
+
+export type ConnectorsQuery = {
+  __typename?: "QueriesRoot";
+  connectors: {
+    __typename?: "ConnectorConnection";
+    totalCount: number;
+    edges: Array<{
+      __typename?: "ConnectorEdge";
+      node: {
+        __typename?: "Connector";
+        id: string;
+        createdAt: any;
+        updatedAt: any;
+        name: string;
+        lastHeartbeatAt?: any | null;
+        hostname?: string | null;
+        state: ConnectorState;
+        publicIP?: string | null;
+        privateIPs: Array<string>;
+        version?: string | null;
+        remoteNetwork: { __typename?: "RemoteNetwork"; id: string; name: string };
+      };
+    }>;
+  };
+};
+
 export type GroupsQueryVariables = Exact<{
   filter?: InputMaybe<GroupFilterInput>;
 }>;
@@ -1784,6 +1813,31 @@ export type ServiceAccountsQuery = {
   };
 };
 
+export const ConnectorsDocument = gql`
+  query connectors($filter: ConnectorFilterInput) {
+    connectors(filter: $filter) {
+      totalCount
+      edges {
+        node {
+          id
+          createdAt
+          updatedAt
+          name
+          lastHeartbeatAt
+          hostname
+          state
+          publicIP
+          privateIPs
+          version
+          remoteNetwork {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
 export const GroupsDocument = gql`
   query groups($filter: GroupFilterInput) {
     groups(filter: $filter) {
@@ -1928,6 +1982,21 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    connectors(
+      variables?: ConnectorsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<ConnectorsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<ConnectorsQuery>(ConnectorsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "connectors",
+        "query",
+        variables,
+      );
+    },
     groups(variables?: GroupsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GroupsQuery> {
       return withWrapper(
         (wrappedRequestHeaders) =>

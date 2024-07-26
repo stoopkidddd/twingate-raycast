@@ -33,6 +33,12 @@
       "title": "Service Accounts",
       "description": "List Service Accounts in your tenant",
       "mode": "view"
+    },
+    {
+      "name": "connectors",
+      "title": "Connectors",
+      "description": "List Connectors in your tenant",
+      "mode": "view"
     }
   ],
   "preferences": [

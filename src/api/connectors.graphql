@@ -1,0 +1,23 @@
+query connectors($filter: ConnectorFilterInput) {
+  connectors(filter: $filter) {
+    totalCount
+    edges {
+      node {
+        id
+        createdAt
+        updatedAt
+        name
+        lastHeartbeatAt
+        hostname
+        state
+        publicIP
+        privateIPs
+        version
+        remoteNetwork {
+          id
+          name
+        }
+      }
+    }
+  }
+}
